@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modèle Numérique Réfrigérateur Peltier</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Inclure Chart.js pour les graphiques -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Modèle Numérique Réfrigérateur Peltier</h1>
+        <div class="intro">
+            <p>
+                Cette expérimentation vise à comparer deux variantes d’un réfrigérateur utilisant des modules Peltier pour mieux comprendre leur efficacité énergétique. La <strong>variante A</strong> utilise une circulation d’eau pour dissiper la chaleur et une circulation d’air pour refroidir l’intérieur du frigo, tandis que la <strong>variante B</strong> utilise une circulation d’eau pour les deux (dissipation de chaleur et refroidissement). Ces tests sont cruciaux pour les expérimentateurs utilisant des modules Peltier, car ils montrent comment le choix du fluide (air ou eau) impacte l’efficacité énergétique et les performances de refroidissement. En explorant ces différences, nous pouvons optimiser les systèmes Peltier pour des applications DIY plus performantes.
+            </p>
+        </div>
+    </header>
+
+    <!-- Section Schéma -->
+    <section class="schema-section">
+        <h2>Schéma du Système</h2>
+        <label for="variant">Choisir la variante :</label>
+        <select id="variant" onchange="updateSchema()">
+            <option value="A">Variante A (Air)</option>
+            <option value="B">Variante B (Eau)</option>
+        </select>
+        <div id="schema"></div>
+    </section>
+
+    <!-- Section V-Cards -->
+    <section class="vcard-section">
+        <h2>Paramètres des Modules</h2>
+        <div class="vcard-container">
+            <!-- V-Card Peltier -->
+            <div class="vcard">
+                <img src="sources/peltier.svg" alt="Module Peltier" class="vcard-image">
+                <h3>Peltier</h3>
+                <p>Nombre de modules : <span id="vcard-numModules">1</span></p>
+                <p>Tension (V) : <span id="vcard-voltage">12</span></p>
+                <p>Ampérage (A) : <span id="vcard-current">6</span></p>
+                <p>Temps de fonctionnement (h) : <span id="vcard-time">1</span></p>
+                <button onclick="openModal('peltier')">Éditer</button>
+            </div>
+
+            <!-- V-Card Caisse -->
+            <div class="vcard">
+                <img src="sources/caisse.svg" alt="Caisse XPS" class="vcard-image">
+                <h3>Caisse</h3>
+                <p>Volume intérieur (m³) : <span id="vcard-volInt">0.011</span></p>
+                <p>Conductivité thermique XPS (W/m·K) : <span id="vcard-lambda">0.033</span></p>
+                <p>Épaisseur XPS (m) : <span id="vcard-thickness">0.04</span></p>
+                <p>Surface extérieure (m²) : <span id="vcard-surface">0.56</span></p>
+                <p>Température extérieure (°C) : <span id="vcard-tempExt">23.2</span></p>
+                <button onclick="openModal('caisse')">Éditer</button>
+            </div>
+
+            <!-- V-Card Réservoir de Dissipation -->
+            <div class="vcard">
+                <img src="sources/reservoir-dissipation.svg" alt="Réservoir de Dissipation" class="vcard-image">
+                <h3>Réservoir de Dissipation</h3>
+                <p>Volume d’eau (litres) : <span id="vcard-volWaterHot">4</span></p>
+                <p>Température initiale (°C) : <span id="vcard-tempWaterHotInit">17</span></p>
+                <button onclick="openModal('reservoir-dissipation')">Éditer</button>
+            </div>
+
+            <!-- V-Card Réservoir Frigo -->
+            <div class="vcard">
+                <img src="sources/reservoir-frigo.svg" alt="Réservoir Frigo" class="vcard-image">
+                <h3>Réservoir Frigo</h3>
+                <p>Volume d’eau (litres) : <span id="vcard-volWaterCold">1</span></p>
+                <p>Température initiale eau (°C) : <span id="vcard-tempWaterColdInit">17</span></p>
+                <p>Volume d’air (litres) : <span id="vcard-volAirCold">10.41</span></p>
+                <p>Température initiale air (°C) : <span id="vcard-tempAirColdInit">15</span></p>
+                <button onclick="openModal('reservoir-frigo')">Éditer</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bouton Calculer -->
+    <section class="calculate-section">
+        <button onclick="simulate()">Calculer</button>
+    </section>
+
+    <!-- Section Résultats et Graphiques -->
+    <section class="results-section" id="results-section">
+        <h2>Rapport des Résultats</h2>
+        <div id="results"></div>
+        <div class="charts">
+            <h3>Graphiques</h3>
+            <div class="chart-container">
+                <canvas id="tempChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="efficiencyChart"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modale pour Édition -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">×</span>
+            <h2 id="modal-title"></h2>
+            <div class="modal-body">
+                <img id="modal-image" src="" alt="Image du module">
+                <div id="modal-form"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

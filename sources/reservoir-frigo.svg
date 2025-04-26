@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="199.25385mm"
+   height="199.98071mm"
+   viewBox="0 0 199.25385 199.98071"
+   version="1.1"
+   id="svg8794"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="reservoir-frigo.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview8796"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.84096521"
+     inkscape:cx="260.41505"
+     inkscape:cy="342.46363"
+     inkscape:window-width="2560"
+     inkscape:window-height="1532"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs8791" />
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(132.34726,-249.86557)">
+    <g
+       id="g2274"
+       transform="matrix(2.9279858,0,0,2.0985877,-413.53901,-20.288998)">
+      <rect
+         style="fill:#00ffff;fill-opacity:0.603592;stroke:#808080;stroke-width:0.325448"
+         id="rect236"
+         width="67.726059"
+         height="94.967552"
+         x="96.198624"
+         y="128.89433" />
+      <rect
+         style="fill:none;fill-opacity:0.603592;stroke:#0000ff;stroke-width:0.318029"
+         id="rect238"
+         width="51.444141"
+         height="74.265213"
+         x="104.33958"
+         y="139.2455" />
+      <rect
+         style="fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:0.320707"
+         id="rect240"
+         width="51.269768"
+         height="15.759289"
+         x="104.42767"
+         y="197.79536" />
+      <rect
+         style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.617792"
+         id="rect350"
+         width="51.269768"
+         height="58.479675"
+         x="104.42767"
+         y="-197.79536"
+         transform="scale(1,-1)" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:7.05556px;font-family:'Noto Sans Symbols2';-inkscape-font-specification:'Noto Sans Symbols2';text-align:center;text-anchor:middle;fill:#4d4d4d;fill-opacity:1;stroke:none;stroke-width:1.437;stroke-dasharray:none;stroke-opacity:0.495924"
+       x="-32.575695"
+       y="440.07574"
+       id="text3345"><tspan
+         sodipodi:role="line"
+         style="text-align:center;text-anchor:middle;fill:#4d4d4d;stroke-width:1.437"
+         x="-32.575695"
+         y="440.07574"
+         id="tspan3343">Isolation</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:7.05556px;font-family:'Noto Sans Symbols2';-inkscape-font-specification:'Noto Sans Symbols2';text-align:center;text-anchor:middle;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:0.537001;stroke-dasharray:none;stroke-opacity:0.495924"
+       x="-32.667419"
+       y="390.02863"
+       id="text3559"><tspan
+         sodipodi:role="line"
+         id="tspan3557"
+         style="stroke-width:0.537"
+         x="-32.667419"
+         y="390.02863">Air</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:7.05556px;font-family:'Noto Sans Symbols2';-inkscape-font-specification:'Noto Sans Symbols2';text-align:center;text-anchor:middle;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:0.537001;stroke-dasharray:none;stroke-opacity:0.495924"
+       x="-32.709751"
+       y="404.6864"
+       id="text3613"><tspan
+         sodipodi:role="line"
+         id="tspan3611"
+         style="fill:#ffffff;stroke-width:0.537"
+         x="-32.709751"
+         y="404.6864">Water</tspan></text>
+  </g>
+</svg>
