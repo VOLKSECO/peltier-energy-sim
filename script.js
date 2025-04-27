@@ -4,7 +4,7 @@ const CP_AIR = 0.279; // Wh/m³·K - Capacité thermique volumique de l'air
 const RHO_WATER = 1000; // kg/m³ - Densité de l'eau
 const RHO_AIR = 1.2; // kg/m³ - Densité de l'air
 const H_CONV = 25; // W/m²·K (air-eau, version A)
-const H_CONV_WATER = 100; // W/m²·K (eau-eau, version B)
+const H_CONV_WATER = 1; // W/m²·K (eau-eau, version B)
 
 let consumptionChart, temperatureChart, energyChart, frigoLossChart;
 
@@ -387,27 +387,51 @@ window.simulate = function() {
         } else {
             // Version B : Refroidir l'eau en premier, puis l'air par convection
             // Énergie froide appliquée à l'eau
-            const maxEnergyWater = massWaterCold * CP_WATER * (tempWaterCold - tempIntTarget);
-            energyColdWaterPerMin = Math.min(energyColdPerMin, maxEnergyWater);
+            // On ne limite plus par maxEnergyWater pour permettre à l'eau de continuer à se refroidir
+            energyColdWaterPerMin = energyColdPerMin; // Toute l'énergie froide va à l'eau
             totalEnergyColdWater += energyColdWaterPerMin;
 
             // Mise à jour de la température de l'eau (avant convection avec l'air)
             const deltaTWaterCooling = energyColdWaterPerMin / (massWaterCold * CP_WATER);
             tempWaterCold -= deltaTWaterCooling;
 
+            // S'assurer que tempWaterCold ne descend pas en dessous de tempIntTarget
+            if (tempWaterCold < tempIntTarget) {
+                tempWaterCold = tempIntTarget;
+                energyColdWaterPerMin = (tempWaterCold + deltaTWaterCooling - tempIntTarget) * (massWaterCold * CP_WATER);
+            }
+
+            // Énergie restante après avoir refroidi l'eau
+            const energyRemaining = energyColdPerMin - energyColdWaterPerMin;
+
             // Échange thermique par convection entre l'eau et l'air
             const deltaTWaterAir = tempWaterCold - tempFrigo;
             const energyConvWaterToAir = hConv * surfaceExchange * deltaTWaterAir / 60; // Wh/min
+
+            // Toujours permettre le transfert si l'eau est plus froide que l'air
             if (deltaTWaterAir < 0) {
                 // L'eau est plus froide que l'air, donc l'eau refroidit l'air
                 energyColdAirPerMin = Math.abs(energyConvWaterToAir);
-                energyColdWaterPerMin -= energyColdAirPerMin; // L'eau perd de l'énergie froide
                 totalEnergyColdAir += energyColdAirPerMin;
-            }
 
-            // Mise à jour de la température de l'air
-            const deltaTAirCooling = energyColdAirPerMin / (volAirColdM3 * CP_AIR);
-            tempFrigo -= deltaTAirCooling;
+                // Mise à jour de la température de l'air
+                const deltaTAirCooling = energyColdAirPerMin / (volAirColdM3 * CP_AIR);
+                tempFrigo -= deltaTAirCooling;
+
+                // Ajuster tempWaterCold pour refléter l'énergie transférée à l'air
+                const deltaTWaterHeating = energyColdAirPerMin / (massWaterCold * CP_WATER);
+                tempWaterCold += deltaTWaterHeating;
+            } else if (deltaTWaterAir > 0 && energyRemaining > 0) {
+                // Si l'air est plus froid que l'eau (peu probable mais possible à cause des pertes),
+                // on utilise l'énergie restante pour refroidir l'air directement
+                const maxEnergyAir = volAirColdM3 * CP_AIR * (tempFrigo - tempIntTarget);
+                energyColdAirPerMin = Math.min(energyRemaining, maxEnergyAir);
+                totalEnergyColdAir += energyColdAirPerMin;
+
+                // Mise à jour de la température de l'air
+                const deltaTAirCooling = energyColdAirPerMin / (volAirColdM3 * CP_AIR);
+                tempFrigo -= deltaTAirCooling;
+            }
 
             // Appliquer les pertes thermiques après les échanges
             const thermalMassWater = massWaterCold * CP_WATER;
