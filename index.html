@@ -3,113 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modèle Numérique Réfrigérateur Peltier</title>
+    <title>Simulateur d'Énergie Peltier</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Inclure Chart.js pour les graphiques -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <header>
-        <h1>Modèle Numérique Réfrigérateur Peltier</h1>
-        <div class="intro">
-            <p>
-                Cette expérimentation vise à comparer deux variantes d’un réfrigérateur utilisant des modules Peltier pour mieux comprendre leur efficacité énergétique. La <strong>variante A</strong> utilise une circulation d’eau pour dissiper la chaleur et une circulation d’air pour refroidir l’intérieur du frigo, tandis que la <strong>variante B</strong> utilise une circulation d’eau pour les deux (dissipation de chaleur et refroidissement). Ces tests sont cruciaux pour les expérimentateurs utilisant des modules Peltier, car ils montrent comment le choix du fluide (air ou eau) impacte l’efficacité énergétique et les performances de refroidissement. En explorant ces différences, nous pouvons optimiser les systèmes Peltier pour des applications DIY plus performantes.
-            </p>
-        </div>
+        <h1>Modèle Numérique de Réfrigérateur Peltier        </h1>
+        <p>
+            Ce simulateur vise à comparer deux variantes d’un réfrigérateur utilisant des modules Peltier pour mieux comprendre leur efficacité énergétique et comment conserver les températures basses atteintes.
+        </p>
+    
     </header>
 
-    <!-- Section Schéma -->
-    <section class="schema-section">
-        <h2>Schéma du Système</h2>
-        <label for="variant">Choisir la variante :</label>
-        <select id="variant" onchange="updateSchema()">
-            <option value="A">Variante A (Air)</option>
-            <option value="B">Variante B (Eau)</option>
-        </select>
-        <div id="schema"></div>
-    </section>
+    <main>
+        <!-- Paramètres de la Simulation -->
+        <section id="parameters-section">
+            <h2>Paramètres de la Simulation</h2>
+            <div class="parameters">
+                <label for="variant">Variante :</label>
+                <select id="variant" onchange="updateSchema()">
+                    <option value="A">Variante A (Air)</option>
+                    <option value="B">Variante B (Eau)</option>
+                </select>
 
-    <!-- Section V-Cards -->
-    <section class="vcard-section">
-        <h2>Paramètres des Modules</h2>
-        <div class="vcard-container">
-            <!-- V-Card Peltier -->
-            <div class="vcard">
-                <img src="sources/peltier.svg" alt="Module Peltier" class="vcard-image">
-                <h3>Peltier</h3>
-                <p>Nombre de modules : <span id="vcard-numModules">1</span></p>
-                <p>Tension (V) : <span id="vcard-voltage">12</span></p>
-                <p>Ampérage (A) : <span id="vcard-current">6</span></p>
-                <p>Temps de fonctionnement (h) : <span id="vcard-time">1</span></p>
-                <button onclick="openModal('peltier')">Éditer</button>
+                <label for="tempExtMax">Température extérieure max (°C) :</label>
+                <input type="number" id="tempExtMax" value="23.2" step="0.1">
+
+                <label for="tempIntTarget">Température intérieure cible (°C) :</label>
+                <input type="number" id="tempIntTarget" value="2" step="0.1">
+
+                <label for="simTime">Temps de simulation (minutes) :</label>
+                <input type="number" id="simTime" value="60">
+
+                <label for="deltaTHot">ΔT Réservoir Dissipation (entrée/sortie, °C) :</label>
+                <input type="number" id="deltaTHot" value="5" step="0.1">
+
+                <label for="deltaTCold">ΔT Peltier Froid (entrée/sortie, °C, Version B) :</label>
+                <input type="number" id="deltaTCold" value="3" step="0.1">
+
+                <button onclick="simulate()">Simuler</button>
             </div>
 
-            <!-- V-Card Caisse -->
-            <div class="vcard">
-                <img src="sources/caisse.svg" alt="Caisse XPS" class="vcard-image">
-                <h3>Caisse</h3>
-                <p>Volume intérieur (m³) : <span id="vcard-volInt">0.011</span></p>
-                <p>Conductivité thermique XPS (W/m·K) : <span id="vcard-lambda">0.033</span></p>
-                <p>Épaisseur XPS (m) : <span id="vcard-thickness">0.04</span></p>
-                <p>Surface extérieure (m²) : <span id="vcard-surface">0.56</span></p>
-                <p>Température extérieure (°C) : <span id="vcard-tempExt">23.2</span></p>
-                <button onclick="openModal('caisse')">Éditer</button>
-            </div>
+            <div id="schema"></div>
+        </section>
 
-            <!-- V-Card Réservoir de Dissipation -->
-            <div class="vcard">
-                <img src="sources/reservoir-dissipation.svg" alt="Réservoir de Dissipation" class="vcard-image">
-                <h3>Réservoir de Dissipation</h3>
-                <p>Volume d’eau (litres) : <span id="vcard-volWaterHot">4</span></p>
-                <p>Température initiale (°C) : <span id="vcard-tempWaterHotInit">17</span></p>
-                <button onclick="openModal('reservoir-dissipation')">Éditer</button>
+        <!-- V-Cards -->
+        <section id="vcards-section">
+            <h2>Modules du Système</h2>
+            <div class="vcard-container">
+                <!-- Batterie -->
+                <div class="vcard">
+                    <div class="image-container">
+                        <img src="sources/battery.svg" alt="Batterie" class="vcard-image">
+                    </div>
+                    <h3 data-module="battery">battery</h3>
+                    <p>Capacité : <span id="vcard-batteryCapacity">100</span> Ah</p>
+                    <p>Tension : <span id="vcard-batteryVoltage">12</span> V</p>
+                    <p>Courant max : <span id="vcard-batteryCurrentMax">10</span> A</p>
+                    <button>Éditer</button>
+                </div>
+                <!-- Peltier -->
+                <div class="vcard">
+                    <div class="image-container">
+                        <img src="sources/peltier.svg" alt="Module Peltier" class="vcard-image">
+                    </div>
+                    <h3 data-module="peltier">peltier</h3>
+                    <p>Nombre de modules : <span id="vcard-numModules">1</span></p>
+                    <p>Tension : <span id="vcard-voltage">12</span> V</p>
+                    <p>Courant : <span id="vcard-current">6</span> A</p>
+                    <p>Puissance : <span id="vcard-peltierPower">72</span> W</p>
+                    <p>Conso. par minute : <span id="vcard-peltierConsumptionPerMin">0</span> Wh/min</p>
+                    <button>Éditer</button>
+                </div>
+                <!-- Caisse -->
+                <div class="vcard">
+                    <div class="image-container">
+                        <img src="sources/caisse.svg" alt="Caisse XPS" class="vcard-image">
+                    </div>
+                    <h3 data-module="caisse">caisse</h3>
+                    <p>Hauteur extérieure : <span id="vcard-heightExt">0.2</span> m</p>
+                    <p>Largeur extérieure : <span id="vcard-widthExt">0.3</span> m</p>
+                    <p>Profondeur extérieure : <span id="vcard-depthExt">0.1833</span> m</p>
+                    <p>Volume intérieur : <span id="vcard-volInt">0.011</span> m³</p>
+                    <p>Surface extérieure : <span id="vcard-surface">0.56</span> m²</p>
+                    <p>Épaisseur isolation : <span id="vcard-thickness">40</span> mm</p>
+                    <p>Conductivité thermique : <span id="vcard-lambda">0.033</span> W/m·K</p>
+                    <p>Coefficient U : <span id="vcard-U">0</span> W/m²·K</p>
+                    <p>Température extérieure : <span id="vcard-tempExt">23.2</span> °C</p>
+                    <p>Pertes par minute : <span id="vcard-heatLossPerMin">0</span> Wh/min</p>
+                    <button>Éditer</button>
+                </div>
+                <!-- Réservoir de Dissipation -->
+                <div class="vcard">
+                    <div class="image-container">
+                        <img src="sources/reservoir-dissipation.svg" alt="Réservoir de Dissipation" class="vcard-image">
+                    </div>
+                    <h3 data-module="reservoir-dissipation">reservoir-dissipation</h3>
+                    <p>Volume d’eau : <span id="vcard-volWaterHot">4</span> litres</p>
+                    <p>Température initiale : <span id="vcard-tempWaterHotInit">17</span> °C</p>
+                    <button>Éditer</button>
+                </div>
+                <!-- Réservoir Frigo -->
+                <div class="vcard">
+                    <div class="image-container">
+                        <img src="sources/reservoir-frigo.svg" alt="Réservoir Frigo" class="vcard-image">
+                    </div>
+                    <h3 data-module="reservoir-frigo">reservoir-frigo</h3>
+                    <p>Volume total : <span id="vcard-volFrigo">11</span> litres</p>
+                    <p>Température initiale : <span id="vcard-tempFrigoInit">17</span> °C</p>
+                    <p>Volume d’eau : <span id="vcard-volWaterCold">1</span> litres</p>
+                    <p>Volume d’air : <span id="vcard-volAirCold">10</span> litres</p>
+                    <button>Éditer</button>
+                </div>
+                <!-- Pompe à Eau Côté Dissipation -->
+                <div class="vcard">
+                    <div class="image-container">
+                        <img src="sources/pump_outside.svg" alt="Pompe Dissipation" class="vcard-image">
+                    </div>
+                    <h3 data-module="pump-hot">pump-hot</h3>
+                    <p>Puissance : <span id="vcard-pumpHotPower">5</span> W</p>
+                    <p>Débit : <span id="vcard-pumpHotFlow">0.5</span> m³/h</p>
+                    <p>Conso. par minute : <span id="vcard-pumpHotConsumptionPerMin">0</span> Wh/min</p>
+                    <button>Éditer</button>
+                </div>
+                <!-- Pompe à Eau Côté Frigo -->
+                <div class="vcard">
+                    <div class="image-container">
+                        <img src="sources/pump_inside.svg" alt="Pompe Frigo" class="vcard-image">
+                    </div>
+                    <h3 data-module="pump-cold">pump-cold</h3>
+                    <p>Puissance : <span id="vcard-pumpColdPower">5</span> W</p>
+                    <p>Débit : <span id="vcard-pumpColdFlow">0.5</span> m³/h</p>
+                    <p>Conso. par minute : <span id="vcard-pumpColdConsumptionPerMin">0</span> Wh/min</p>
+                    <button>Éditer</button>
+                </div>
+                <!-- Ventilateur d’Air Côté Frigo -->
+                <div class="vcard">
+                    <div class="image-container">
+                        <img src="sources/air_dissipator.svg" alt="Ventilateur Frigo" class="vcard-image">
+                    </div>
+                    <h3 data-module="fan">fan</h3>
+                    <p>Puissance : <span id="vcard-fanPower">3</span> W</p>
+                    <p>Débit : <span id="vcard-fanFlow">0.1</span> m³/h</p>
+                    <p>Conso. par minute : <span id="vcard-fanConsumptionPerMin">0</span> Wh/min</p>
+                    <button>Éditer</button>
+                </div>
             </div>
+        </section>
 
-            <!-- V-Card Réservoir Frigo -->
-            <div class="vcard">
-                <img src="sources/reservoir-frigo.svg" alt="Réservoir Frigo" class="vcard-image">
-                <h3>Réservoir Frigo</h3>
-                <p>Volume d’eau (litres) : <span id="vcard-volWaterCold">1</span></p>
-                <p>Température initiale eau (°C) : <span id="vcard-tempWaterColdInit">17</span></p>
-                <p>Volume d’air (litres) : <span id="vcard-volAirCold">10.41</span></p>
-                <p>Température initiale air (°C) : <span id="vcard-tempAirColdInit">15</span></p>
-                <button onclick="openModal('reservoir-frigo')">Éditer</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Bouton Calculer -->
-    <section class="calculate-section">
-        <button onclick="simulate()">Calculer</button>
-    </section>
-
-    <!-- Section Résultats et Graphiques -->
-    <section class="results-section" id="results-section">
-        <h2>Rapport des Résultats</h2>
-        <div id="results"></div>
-        <div class="charts">
-            <h3>Graphiques</h3>
-            <div class="chart-container">
-                <canvas id="tempChart"></canvas>
-            </div>
-            <div class="chart-container">
-                <canvas id="efficiencyChart"></canvas>
-            </div>
-        </div>
-    </section>
-
-    <!-- Modale pour Édition -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">×</span>
-            <h2 id="modal-title"></h2>
-            <div class="modal-body">
-                <img id="modal-image" src="" alt="Image du module">
+        <!-- Modale pour Éditer les Modules -->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">×</span>
+                <h2 id="modal-title">Éditer Module</h2>
+                <img id="modal-image" src="" alt="Module Image">
                 <div id="modal-form"></div>
             </div>
         </div>
-    </div>
+
+        <!-- Résultats -->
+        <section id="results-section">
+            <h2>Résultats</h2>
+            <div id="schema-result"></div>
+            <div id="results-text"></div>
+            <h3>Consommations Électriques</h3>
+            <canvas id="consumptionChart"></canvas>
+            <h3>Températures</h3>
+            <canvas id="temperatureChart"></canvas>
+            <h3>Énergies Échangées</h3>
+            <canvas id="energyChart"></canvas>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 Simulateur d'Énergie Peltier</p>
+    </footer>
 
     <script src="script.js"></script>
 </body>
+<footer>
+    <p>Modèle Numérique de Réfrigérateur Peltier partagé en <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA</a> par <a href="https://volks.eco" target="_blank">volks.eco</a></p>
+</footer>
 </html>

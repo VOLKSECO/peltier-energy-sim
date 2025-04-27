@@ -1,206 +1,134 @@
-/* Palette de couleurs claire et moderne */
-:root {
-    --background-light: #f5f7fa; /* Fond clair */
-    --text-dark: #333333; /* Texte sombre */
-    --accent-color: #4a90e2; /* Bleu doux pour les boutons et accents */
-    --accent-hover: #357abd; /* Bleu plus foncé pour survol */
-    --card-bg: #ffffff; /* Fond des cartes */
-    --border-light: #e0e0e0; /* Bordures claires */
-    --shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Ombre douce */
+/* Réinitialisation des styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* Style général */
 body {
-    font-family: 'Poppins', Arial, sans-serif; /* Police moderne et lisible */
-    background-color: var(--background-light);
-    color: var(--text-dark);
-    margin: 0;
-    padding: 20px;
+    font-family: 'Roboto', sans-serif;
+    background-color: #ffffff;
+    color: #333;
     line-height: 1.6;
 }
 
-/* En-tête */
+header, main, footer {
+    background-color: #ffffff;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
 header {
     text-align: center;
-    margin-bottom: 40px;
-}
-
-h1 {
-    font-size: 2.5rem;
-    color: var(--text-dark);
-    margin-bottom: 10px;
-}
-
-.intro {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-.intro p {
-    font-size: 1.1rem;
-    color: #666666;
-}
-
-/* Titres de section */
-h2 {
-    font-size: 1.8rem;
-    color: var(--text-dark);
+    border-bottom: 1px solid #e0e0e0;
     margin-bottom: 20px;
 }
 
-h3 {
-    font-size: 1.3rem;
-    color: var(--text-dark);
+h1, h2, h3 {
+    color: #222;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+h2 {
+    font-size: 1.8em;
     margin-bottom: 15px;
 }
 
-/* Section Schéma */
-.schema-section {
-    text-align: center;
-    margin-bottom: 40px;
+h3 {
+    font-size: 1.3em;
+    margin-bottom: 10px;
 }
 
-.schema-section label {
-    font-size: 1.1rem;
-    margin-right: 10px;
+/* Paramètres */
+.parameters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
-.schema-section select {
+.parameters label {
+    font-weight: 500;
+}
+
+.parameters input, .parameters select {
     padding: 8px;
-    border-radius: 5px;
-    border: 1px solid var(--border-light);
-    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
 }
 
-#schema {
-    margin-top: 20px;
-    display: inline-block;
+.parameters button {
+    grid-column: span 2;
+    padding: 10px;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
 }
 
-#schema object {
-    border: 1px solid var(--border-light);
-    border-radius: 8px;
-    background-color: var(--card-bg);
-    box-shadow: var(--shadow);
+.parameters button:hover {
+    background-color: #0056b3;
 }
 
-/* Section V-Cards */
-.vcard-section {
-    margin-bottom: 40px;
-}
-
+/* V-Cards */
 .vcard-container {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
-    justify-content: center;
+    margin-bottom: 20px;
 }
 
 .vcard {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-light);
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
     border-radius: 8px;
-    padding: 20px;
-    width: 300px;
-    box-shadow: var(--shadow);
-    transition: transform 0.2s ease;
-    text-align: center; /* Centrer le contenu */
+    padding: 15px;
+    text-align: center;
+    transition: box-shadow 0.3s;
 }
 
 .vcard:hover {
-    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.vcard .image-container {
+    margin-bottom: 10px;
 }
 
 .vcard-image {
     width: 100%;
-    height: 150px;
-    object-fit: contain; /* S’assurer que l’image SVG ne soit pas déformée */
-    margin-bottom: 15px;
-}
-
-.vcard h3 {
-    margin-top: 0;
-    font-size: 1.5rem;
+    max-width: 150px;
+    height: auto;
 }
 
 .vcard p {
     margin: 5px 0;
-    font-size: 1rem;
+    font-size: 0.9em;
 }
 
 .vcard button {
     margin-top: 10px;
     padding: 8px 16px;
-    background-color: var(--accent-color);
-    color: white;
+    background-color: #28a745;
+    color: #ffffff;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
+    font-size: 0.9em;
+    transition: background-color 0.3s;
 }
 
 .vcard button:hover {
-    background-color: var(--accent-hover);
-}
-
-/* Bouton Calculer */
-.calculate-section {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.calculate-section button {
-    padding: 12px 24px;
-    background-color: var(--accent-color);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1.1rem;
-    font-weight: 500;
-    transition: background-color 0.3s ease;
-}
-
-.calculate-section button:hover {
-    background-color: var(--accent-hover);
-}
-
-/* Section Résultats */
-.results-section {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-light);
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: var(--shadow);
-    margin-bottom: 40px;
-}
-
-#results p {
-    font-size: 1rem;
-    margin: 5px 0;
-}
-
-.comment {
-    font-style: italic;
-    color: #666666;
-    margin-top: 10px;
-}
-
-/* Graphiques */
-.charts {
-    margin-top: 20px;
-}
-
-.chart-container {
-    margin-bottom: 30px;
-    width: 100%;
-    height: 300px;
-    background-color: var(--card-bg);
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: var(--shadow);
+    background-color: #218838;
 }
 
 /* Modale */
@@ -216,13 +144,12 @@ h3 {
 }
 
 .modal-content {
-    background-color: var(--card-bg);
-    margin: 5% auto;
+    background-color: #ffffff;
+    margin: 10% auto;
     padding: 20px;
-    width: 80%;
-    max-width: 600px;
+    width: 90%;
+    max-width: 500px;
     border-radius: 8px;
-    box-shadow: var(--shadow);
     position: relative;
 }
 
@@ -230,33 +157,67 @@ h3 {
     position: absolute;
     top: 10px;
     right: 15px;
-    font-size: 1.5rem;
+    font-size: 24px;
     cursor: pointer;
-    color: var(--text-dark);
+    color: #666;
 }
 
-.modal-body {
+.close:hover {
+    color: #333;
+}
+
+#modal-form {
     display: flex;
-    gap: 20px;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.modal-body img {
-    width: 200px;
-    height: auto;
-    border-radius: 8px;
+#modal-form label {
+    font-weight: 500;
 }
 
-.modal-body label {
-    display: block;
-    margin-bottom: 5px;
-    font-size: 1rem;
-}
-
-.modal-body input {
-    width: 100%;
+#modal-form input {
     padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid var(--border-light);
-    border-radius: 5px;
-    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+#modal-form button {
+    padding: 10px;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+#modal-form button:hover {
+    background-color: #0056b3;
+}
+
+/* Résultats */
+#results-text p {
+    margin: 5px 0;
+}
+
+.comment {
+    font-style: italic;
+    color: #666;
+}
+
+/* Graphiques */
+canvas {
+    margin: 20px 0;
+    max-width: 100%;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    border-top: 1px solid #e0e0e0;
+    padding: 10px 0;
+    margin-top: 20px;
+    color: #666;
 }
